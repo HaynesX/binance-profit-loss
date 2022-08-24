@@ -1,0 +1,18 @@
+version: '3'
+services:
+  binance-profit-loss:
+    image: haynesx13/binance-profit-loss:${TAG}
+    container_name: binance-profit-loss
+    command: >
+      sh -c "
+      python -u main.py"
+    ports:
+      - 8004:8004
+    expose:
+      - 8004
+    env_file:
+      - ../env/binance-profit-loss.env
+    volumes:
+      - ../binance-profit-loss-data:/home/binance-profit-loss/pnlData/
+
+
