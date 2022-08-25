@@ -285,9 +285,9 @@ def main():
     
     for eachTelegramMessage in telegramMessages:
         bot.send_message(TELEGRAM_CHAT_ID, eachTelegramMessage, parse_mode="HTML", disable_web_page_preview=True)
-        time.sleep(2.5)
+        time.sleep(4.5)
 
-    time.sleep(3)
+    time.sleep(4)
             
     with open("pnlData/data.json", "w") as outfile:
         json.dump(mainTradesDictionary, outfile)
@@ -299,9 +299,10 @@ def main():
 if __name__ == "__main__":
     bot.send_message("-734646829", "Bot Starting", disable_web_page_preview=True)
     while True:
-        try:
-            main()
-        except Exception as e:
-            bot.send_message("-734646829", e, disable_web_page_preview=True)
+        # try:
+        #     main()
+        # except Exception as e:
+        #     bot.send_message("-734646829", e, disable_web_page_preview=True)
 
-            time.sleep(10)
+        #     time.sleep(10)
+        main()
