@@ -30,6 +30,7 @@ scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/aut
 creds = ServiceAccountCredentials.from_json_keyfile_name("pnlData/haynes-bybit-b58869a98ed4.json", scope)
 googleClient = gspread.authorize(creds)
 sheet = googleClient.open("Trades - Bybit").worksheet("Phil Binance 2 Min Long")
+dailyProfitSheet = googleClient.open("Trades - Bybit").worksheet("Phil Binance Daily Profit Log")
 
 
 
@@ -57,6 +58,17 @@ def main():
 
     if len(trades) == 0:
         return
+    
+    dailyDates = dailyProfitSheet.col_values(1)
+    dailyProfits = dailyProfitSheet.col_values(2)
+
+    dailyCurrentDict = {}
+
+    for index, eachDateProfitList in enumerate(zip(dailyDates, dailyProfits), start=1):
+        if index == 1:
+            continue
+    
+        dailyCurrentDict[eachDateProfitList[0]] = {"Profit": float(eachDateProfitList[1]), "Cell": f"B{index}"}
 
     tradesDictionary = {}
     newTradesFound = []
@@ -108,6 +120,8 @@ def main():
 
     googleSheetRows = []
     telegramMessages = []
+
+    dailyNewDict = {}
 
 
     for eachNewTradeTimestamp in newTradesFound:
@@ -203,6 +217,16 @@ def main():
             created_at = datetime.datetime.fromtimestamp(eachNewTradeTimestamp / 1000)
             created_at_string = created_at.strftime("%d/%m/%Y %H:%M:%S")
 
+            created_at_day_month_year = created_at.strftime("%d/%m/%Y")
+
+            if created_at_day_month_year in dailyCurrentDict:
+                dailyCurrentDict[created_at_day_month_year]["Profit"] += PnL_Percentage
+            else:
+                if created_at_day_month_year in dailyNewDict:
+                    dailyNewDict[created_at_day_month_year]["Profit"] += PnL_Percentage
+                else:
+                    dailyNewDict[created_at_day_month_year] = {"Profit": PnL_Percentage}
+
             
 
             
@@ -240,11 +264,24 @@ def main():
             # add to google sheet list of new rows
 
 
+    dailyProfitNewRows = []
+    for eachKey in dailyNewDict:
+        dailyProfitNewRows.append([eachKey, dailyNewDict[eachKey]["Profit"], "", "=B2-C2"])
+    
+
+    dailyProfitBatchUpdateList = []
+    for eachKey in dailyCurrentDict:
+        dailyProfitBatchUpdateList.append({'range': dailyCurrentDict[eachKey]["Cell"], 'values': [[dailyCurrentDict[eachKey]["Profit"]]]})
+
+
     if len(googleSheetRows) > 0:
         print("New P&L Found. Adding to Google Sheet.")
         googleSheetRows.reverse()
         sheet.insert_rows(googleSheetRows, row=4, value_input_option='USER_ENTERED')
         googleSheetRows.reverse()
+        dailyProfitSheet.batch_update(dailyProfitBatchUpdateList)
+        dailyProfitNewRows.reverse()
+        dailyProfitSheet.insert_rows(dailyProfitNewRows, row=2, value_input_option='USER_ENTERED')
     
     for eachTelegramMessage in telegramMessages:
         bot.send_message(TELEGRAM_CHAT_ID, eachTelegramMessage, parse_mode="HTML", disable_web_page_preview=True)
