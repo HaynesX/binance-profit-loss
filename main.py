@@ -299,10 +299,10 @@ def main():
 if __name__ == "__main__":
     bot.send_message("-734646829", "Bot Starting", disable_web_page_preview=True)
     while True:
-        # try:
-        #     main()
-        # except Exception as e:
-        #     bot.send_message("-734646829", e, disable_web_page_preview=True)
+        try:
+            main()
+        except Exception as e:
+            bot.send_message("-734646829", e, disable_web_page_preview=True)
 
-        #     time.sleep(10)
-        main()
+            time.sleep(10)
+       
