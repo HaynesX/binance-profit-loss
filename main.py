@@ -126,7 +126,7 @@ def main():
 
     for eachNewTradeTimestamp in newTradesFound:
         newTrade = tradesDictionary[eachNewTradeTimestamp]
-        if newTrade["side"] == "Buy":
+        if newTrade["side"] == "Sell":
             
 
             previousSellTimestamp = oldTradesKeys[0]
@@ -158,7 +158,7 @@ def main():
             telegramMessage = f"""
     <b>Trade Opened</b>
                         
-    Side: <b>{newTrade["side"]}</b>
+    Side: <b>Sell</b>
     Entry: <b>{round(newTrade["avgExecPrice"], 2)}</b>
     Qty: <b>{newTrade["totalOrderSize"]}</b>
 
@@ -243,7 +243,7 @@ def main():
             telegramMessage = f"""
     <b>Trade Closed</b>
                         
-    Side: <b>{newTrade["side"]}</b>
+    Side: <b>Buy</b>
     Entry: <b>{round(entryPrice, 3)}</b>
     Exit: <b>{round(exitPrice, 3)}</b>
     Qty: <b>{newTrade["totalOrderSize"]}</b>
