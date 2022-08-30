@@ -109,7 +109,7 @@ def main():
         averageExecutionPrice = totalOrderSize / partTwoCalculation
 
         tradesDictionary[eachTradeTimestamp]["side"] = side
-        tradesDictionary[eachTradeTimestamp]["totalOrderSize"] = round(totalOrderSize, 7)
+        tradesDictionary[eachTradeTimestamp]["totalOrderSize"] = totalOrderSize
         tradesDictionary[eachTradeTimestamp]["avgExecPrice"] = round(averageExecutionPrice, 8)
 
     oldTradesKeys = list(mainTradesDictionary.keys())
@@ -136,6 +136,8 @@ def main():
             currentBalance = previousSell["current_balance"] - newTrade["totalOrderSize"]
             previousBalance = previousSell["current_balance"]
 
+            # currentBalance = previousSell["current_balance"] * 
+
 
 
             newTrade["current_balance"] = currentBalance
@@ -155,9 +157,9 @@ def main():
             telegramMessage = f"""
     <b>Trade Opened</b>
                         
-    Side: <b>Buy</b>
+    Side: <b>Sell</b>
     Entry: <b>{round(newTrade["avgExecPrice"], 2)}</b>
-    Qty: <b>{round(newTrade["totalOrderSize"], 2)}</b>
+    Qty: <b>{newTrade["totalOrderSize"]}</b>
 
     <b>{created_at_string}</b>
     """
@@ -239,10 +241,10 @@ def main():
             telegramMessage = f"""
     <b>Trade Closed</b>
                         
-    Side: <b>Sell</b>
+    Side: <b>Buy</b>
     Entry: <b>{round(entryPrice, 3)}</b>
     Exit: <b>{round(exitPrice, 3)}</b>
-    Qty: <b>{round(newTrade["totalOrderSize"], 4)}</b>
+    Qty: <b>{newTrade["totalOrderSize"]}</b>
     P&L%: <b>{PnL_Percentage}</b>
 
     <b>{created_at_string}</b>
