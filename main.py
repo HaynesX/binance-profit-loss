@@ -126,7 +126,7 @@ def main():
 
     for eachNewTradeTimestamp in newTradesFound:
         newTrade = tradesDictionary[eachNewTradeTimestamp]
-        if newTrade["side"] == "Buy":
+        if newTrade["side"] == "Sell":
             
 
             previousSellTimestamp = oldTradesKeys[0]
