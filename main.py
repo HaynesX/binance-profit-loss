@@ -96,8 +96,8 @@ def main():
                 else:
                     side = "Buy"
             
-            executionPricesToQuantity.append([float(eachRawTrade["price"]), float(eachRawTrade["quoteQty"])])
-            totalOrderSize += float(eachRawTrade["quoteQty"])
+            executionPricesToQuantity.append([float(eachRawTrade["price"]), float(eachRawTrade["qty"])])
+            totalOrderSize += float(eachRawTrade["qty"])
 
             # total order size / (quantity A/execution price A + order size B/execution price B +…. etc etc)
         
