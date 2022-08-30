@@ -133,7 +133,8 @@ def main():
             previousSell = mainTradesDictionary[previousSellTimestamp]
 
             
-            currentBalance = previousSell["current_balance"] - newTrade["totalOrderSize"]
+            currentBalance = previousSell["current_balance"] + newTrade["totalOrderSize"]
+            # currentBalance = previousSell["current_balance"] - newTrade["totalOrderSize"]
             previousBalance = previousSell["current_balance"]
 
             # currentBalance = previousSell["current_balance"] * 
@@ -187,6 +188,7 @@ def main():
             entryPrice = previousBuy["avgExecPrice"]
             exitPrice = newTrade["avgExecPrice"]
 
+            currentBalance = previousBuy["current_balance"] - newTrade["totalOrderSize"]
             currentBalance = previousBuy["current_balance"] + newTrade["totalOrderSize"]
             PnL_USD = currentBalance - previousSell["current_balance"]
             PnL_Percentage = round(((currentBalance - previousSell["current_balance"]) / previousSell["current_balance"]) * 100, 3)
